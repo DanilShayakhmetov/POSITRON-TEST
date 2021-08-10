@@ -58,7 +58,7 @@ AppAsset::register($this);
             ) : (''),
 
             Yii::$app->user->isGuest ?  ('') : (
-            ['label' => 'admin', 'url' => ['/admin/default/index']]
+            ['label' => 'admin', 'url' => ['/admin/book/index']]
             ),
         ],
     ]);
