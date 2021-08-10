@@ -17,11 +17,11 @@ class m201105_231627_create_book extends Migration
         $this->createTable('{{%book}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull()->unique(),
-            'isbn' => $this->smallInteger()->notNull()->unique(),
+            'isbn' => $this->string(),
             'pageCount' => $this->smallInteger(),
             'publishedDate' => $this->dateTime(),
             'thumbnailUrl' => $this->string(),
-            'shortDescription' => $this->string(),
+            'shortDescription' => $this->text(),
             'longDescription' => $this->text(),
             'status' => $this->string(),
             'authors' => $this->string(),

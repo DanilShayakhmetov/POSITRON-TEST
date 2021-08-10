@@ -15,7 +15,6 @@ class m201105_173120_init extends \yii\db\Migration
             'username' => $this->string()->notNull()->unique(),
             'auth_key' => $this->string(32)->notNull(),
             'password_hash' => $this->string()->notNull(),
-            'access_token' => $this->string()->unique(),
             'email' => $this->string()->notNull()->unique(),
         ], $tableOptions);
     }
