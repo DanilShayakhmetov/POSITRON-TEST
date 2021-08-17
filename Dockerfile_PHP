@@ -1,6 +1,9 @@
-FROM php:7.1-fpm
+FROM php:7.3-fpm
+
+#COPY ./ /var/www/html/
 
 COPY ./ /var/www/html/
+
 
 RUN apt-get update \
     && echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list \
@@ -19,7 +22,33 @@ RUN apt-get update \
     && docker-php-ext-enable xdebug\
     && rm -rf /var/lib/apt/lists/*
 
-ADD ./php.ini /usr/local/etc/php/php.ini
+#ADD ./php.ini /usr/local/etc/php/php.ini
 
-RUN wget https://getcomposer.org/installer -O - -q \
-    | php -- --install-dir=/bin --filename=composer --quiet
+
+ENV PHP_ENABLE_XDEBUG=0 \
+    PATH=/www:/var/www/vendor/bin:/root/.composer/vendor/bin:$PATH \
+    TERM=linux \
+    VERSION_PRESTISSIMO_PLUGIN=^0.3.7 \
+    COMPOSER_ALLOW_SUPERUSER=1
+
+
+# Add GITHUB_API_TOKEN support for composer
+
+RUN mkdir /usr/local/bin/composer
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+        --filename=composer.phar \
+        --install-dir=/usr/local/bin
+
+
+
+RUN chmod 777 \
+        /usr/local/bin/composer
+
+
+
+ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=1000 --with-fpm-group=1000
+USER 1000
+
+#При перебилде php /usr/local/bin/composer.phar update т.к версии ничего ни с чем не совпадают из контекста php контейнера
